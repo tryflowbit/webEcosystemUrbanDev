@@ -1,62 +1,48 @@
 {
     "proyecto": {
-      "id": "fincas_del_plata",
-      "nombre": "Fincas del Plata",
-      "total_lotes": 120,
+      "id": "fincas_altos_del_plata",
+      "nombre": "Fincas Altos del Plata",
       "valor_dolar_blue": 1250.00
     },
-    "lotes": [
-      { "id": 1, "manzana": "A", "lote": "01", "estado": "Vendido", "cliente_id": 101 },
-      { "id": 2, "manzana": "A", "lote": "02", "estado": "Liberado por Mora", "cliente_id": null, "historial_moroso": "Ex-propietario: Gómez (DNI: 28.xxx.xxx) - Caducó tras 6 meses de impago." },
-      { "id": 3, "manzana": "A", "lote": "03", "estado": "Disponible", "cliente_id": null },
-      { "id": 4, "manzana": "B", "lote": "10", "estado": "Vendido", "cliente_id": 102 },
-      { "id": 5, "manzana": "B", "lote": "11", "estado": "Vendido", "cliente_id": 103 }
-    ],
     "clientes": [
       {
         "id": 101,
         "nombre": "Juan",
         "apellido": "Pérez",
         "dni": "32456789",
-        "plan": "60 Cuotas",
+        "plan": "100% 220 cuotas",
         "cuota_actual": 14,
-        "total_cuotas": 60,
         "valor_cuota_usd": 250,
-        "dia_cobro": 10,
+        "meses_atraso": 0,
         "manzana": "A",
         "lote": "01",
-        "estado_pago": "Al Día",
-        "caducado": false
+        "estado_pago": "Al Día"
       },
       {
         "id": 102,
         "nombre": "María",
         "apellido": "Rodríguez",
         "dni": "29444333",
-        "plan": "24 Cuotas",
+        "plan": "Anticipo 30% + 60 cuotas",
         "cuota_actual": 8,
-        "total_cuotas": 24,
         "valor_cuota_usd": 400,
-        "dia_cobro": 5,
+        "meses_atraso": 5,
         "manzana": "B",
         "lote": "10",
-        "estado_pago": "Atrasado (25 días)",
-        "caducado": false
+        "estado_pago": "Riesgo de Caducidad"
       },
       {
         "id": 103,
         "nombre": "Carlos",
         "apellido": "López",
         "dni": "24111222",
-        "plan": "12 Cuotas",
+        "plan": "Financiación a medida 36 meses",
         "cuota_actual": 4,
-        "total_cuotas": 12,
         "valor_cuota_usd": 500,
-        "dia_cobro": 10,
+        "meses_atraso": 7,
         "manzana": "B",
         "lote": "11",
-        "estado_pago": "Caducado (Sin pagos por +6 meses)",
-        "caducado": true
+        "estado_pago": "Caducado"
       }
     ]
   }
