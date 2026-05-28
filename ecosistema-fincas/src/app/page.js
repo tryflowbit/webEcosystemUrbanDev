@@ -4,7 +4,6 @@ import mockData from './data/mockData.json';
 
 export default function AppFlow() {
   // Estados del Flujo Principal
-  // 'login' -> 'select_project' -> 'dashboard'
   const [currentStep, setCurrentStep] = useState('login');
   
   // Estados de UI y Preferencias
@@ -21,7 +20,6 @@ export default function AppFlow() {
   const [searchResults, setSearchResults] = useState(mockData.clientes);
   const [selectedClient, setSelectedClient] = useState(null);
 
-  // Proyectos simulados para la demo
   const proyectos = [
     { id: 'fincas_altos_del_plata', nombre: 'Fincas Altos del Plata', lotes: 820, ubicacion: 'Buenos Aires', estado: 'Operativo' },
     { id: 'fincas_del_lago', nombre: 'Fincas del Lago', lotes: 450, ubicacion: 'Córdoba', estado: 'En Lanzamiento' },
@@ -35,7 +33,6 @@ export default function AppFlow() {
     else document.documentElement.classList.remove('dark');
   }, [isDarkMode]);
 
-  // Manejador de Login simulado
   const handleLogin = (e) => {
     e.preventDefault();
     if (username.toLowerCase() === 'admin' && password === '1234') {
@@ -46,7 +43,6 @@ export default function AppFlow() {
     }
   };
 
-  // Buscador de clientes
   const handleSearch = (e) => {
     e.preventDefault();
     const term = searchTerm.toLowerCase();
@@ -219,15 +215,32 @@ export default function AppFlow() {
                     )}
                   </div>
 
-                  {/* Hamburguesa */}
+                  {/* Hamburguesa con Menú Mejorado */}
                   <div className="relative">
                     <button onClick={() => { setShowNavMenu(!showNavMenu); setShowNotifications(false); }} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-500 dark:text-slate-400 transition-colors">
                       ☰
                     </button>
                     {showNavMenu && (
-                      <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl shadow-lg py-2 z-50">
-                        <button className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700" onClick={() => alert('Módulo de deudores en simulación para la demo')}>Lista Completa de Morosos</button>
-                        <button className="w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 border-t border-gray-100 dark:border-slate-700 mt-1 pt-2" onClick={() => { setCurrentStep('login'); setSelectedProject(null); setSelectedClient(null); }}>Cerrar Sesión</button>
+                      <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl shadow-lg py-2 z-50 overflow-hidden">
+                        
+                        <div className="px-4 py-2 bg-gray-50 dark:bg-slate-900/50 border-b border-gray-100 dark:border-slate-700 mb-1">
+                          <p className="text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase tracking-wider">Mi Cuenta</p>
+                        </div>
+                        
+                        <button className="w-full text-left px-4 py-2.5 text-sm text-gray-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" onClick={() => alert('Módulo de Configuración: Aquí podrá cambiar su contraseña, correo y datos de perfil.')}>
+                          Configuración
+                        </button>
+                        
+                        <button className="w-full text-left px-4 py-2.5 text-sm text-gray-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" onClick={() => alert('Módulo de deudores en simulación para la demo')}>
+                          Lista Completa de Morosos
+                        </button>
+                        
+                        <div className="border-t border-gray-100 dark:border-slate-700 mt-1">
+                          <button className="w-full text-left px-4 py-2.5 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors" onClick={() => { setCurrentStep('login'); setSelectedProject(null); setSelectedClient(null); setShowNavMenu(false); }}>
+                            Cerrar Sesión
+                          </button>
+                        </div>
+                        
                       </div>
                     )}
                   </div>
@@ -262,7 +275,7 @@ export default function AppFlow() {
                       <tr className="bg-gray-50 dark:bg-slate-950/50 border-b border-gray-200 dark:border-slate-800 text-gray-600 dark:text-slate-400 font-medium">
                         <th className="p-4">Cliente</th>
                         <th className="p-4">Ubicación</th>
-                        <th className="p-4 hidden md:table-cell">Plan Técnico Acordado</th>
+                        <th className="p-4 hidden md:table-cell">Plan Acordado</th>
                         <th className="p-4">Estado Financiero</th>
                         <th className="p-4 text-right">Acción</th>
                       </tr>
@@ -285,7 +298,7 @@ export default function AppFlow() {
                             </span>
                           </td>
                           <td className="p-4 text-right">
-                            <button onClick={() => setSelectedClient(cliente)} className="text-xs font-medium bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 px-4 py-2 rounded-lg hover:bg-gray-50">
+                            <button onClick={() => setSelectedClient(cliente)} className="text-xs font-medium bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors">
                               Ver Detalles
                             </button>
                           </td>
@@ -307,7 +320,7 @@ export default function AppFlow() {
                     <div className="flex justify-between items-start mb-6">
                       <div>
                         <h2 className="text-2xl font-bold text-gray-900 dark:text-slate-100">{selectedClient.apellido}, {selectedClient.nombre}</h2>
-                        <p className="text-gray-500 dark:text-slate-400 mt-1">DNI técnico: {selectedClient.dni}</p>
+                        <p className="text-gray-500 dark:text-slate-400 mt-1">DNI: {selectedClient.dni}</p>
                       </div>
                       <span className={`px-3 py-1 rounded-full text-sm font-medium border 
                         ${selectedClient.meses_atraso === 0 ? 'bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20' : 
@@ -328,7 +341,7 @@ export default function AppFlow() {
                       </div>
                       <div>
                         <p className="text-xs text-gray-400 uppercase font-semibold">Progreso Financiero</p>
-                        <p className="text-gray-900 dark:text-slate-200 font-medium mt-1">Cuota liquidada N° {selectedClient.cuota_actual}</p>
+                        <p className="text-gray-900 dark:text-slate-200 font-medium mt-1">{selectedClient.cuota_actual} Cuotas Pagas</p>
                       </div>
                       <div>
                         <p className="text-xs text-gray-400 uppercase font-semibold">Monto Base de Cuota</p>
@@ -341,7 +354,7 @@ export default function AppFlow() {
                     <div>
                       <h3 className="text-lg font-bold text-gray-900 dark:text-slate-100 mb-2">Caja de Cobranza</h3>
                       <p className="text-sm text-gray-600 dark:text-slate-400 mb-4">
-                        Procesar el cobro de la cuota N° {selectedClient.cuota_actual + 1}. El sistema indexará intereses por mora automáticamente.
+                        Seleccione esta opción para asentar un nuevo pago. El sistema calculará intereses si corresponde.
                       </p>
                     </div>
                     
@@ -352,8 +365,8 @@ export default function AppFlow() {
                           <p className="text-xs text-red-600 dark:text-red-500 mt-1">Se superó el límite de tolerancia de 6 meses de impago.</p>
                         </div>
                       ) : (
-                        <button onClick={() => alert(`Procesando pago simulado para la cuota ${selectedClient.cuota_actual + 1}`)} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl shadow-md">
-                          Registrar Cobro
+                        <button onClick={() => alert(`Procesando nuevo pago para ${selectedClient.nombre} ${selectedClient.apellido}. El sistema registrará la fecha exacta de esta transacción.`)} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl shadow-md transition-colors">
+                          Registrar Nuevo Cobro
                         </button>
                       )}
                     </div>
