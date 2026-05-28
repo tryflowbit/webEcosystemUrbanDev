@@ -1,19 +1,30 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import mockData from './data/mockData.json';
 
 export default function AdminDashboard() {
+  // Estados de UI
+  const [isDarkMode, setIsDarkMode] = useState(true);
+  const [showNavMenu, setShowNavMenu] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  
+  // Estados de Datos
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
-  const [activeTab, setActiveTab] = useState('overview'); // overview, lotes, clientes_morosos
+  const [searchResults, setSearchResults] = useState(mockData.clientes);
+  const [selectedClient, setSelectedClient] = useState(null);
 
-  // Función de búsqueda simulada basada en tu lógica original
+  // Alertas calculadas automáticamente
+  const alertas = mockData.clientes.filter(c => c.meses_atraso >= 5);
+
+  // Manejo del Theme (Dark/Light)
+  useEffect(() => {
+    if (isDarkMode) document.documentElement.classList.add('dark');
+    else document.documentElement.classList.remove('dark');
+  }, [isDarkMode]);
+
+  // Buscador
   const handleSearch = (e) => {
     e.preventDefault();
-    if (!searchTerm.trim()) {
-      setSearchResults([]);
-      return;
-    }
     const term = searchTerm.toLowerCase();
     const filtered = mockData.clientes.filter(c => 
       c.nombre.toLowerCase().includes(term) ||
@@ -24,170 +35,244 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="min-height-screen bg-slate-950 text-slate-100 font-sans">
-      {/* Barra de Navegación Superior */}
-      <nav className="border-b border-slate-800 bg-slate-900/50 backdrop-blur px-8 py-4 flex justify-between items-center sticky top-0 z-50">
-        <div className="flex items-center gap-3">
-          <span className="text-xl font-bold tracking-tight text-cyan-400">FINCAS DEL PLATA</span>
-          <span className="text-xs bg-slate-800 text-slate-400 px-2.5 py-0.5 rounded-full border border-slate-700">Panel Admin (DEMO)</span>
-        </div>
-        <div className="text-sm text-slate-400">
-          Cotización Dólar Blue: <span className="text-emerald-400 font-semibold">${mockData.proyecto.valor_dolar_blue} ARS</span>
-        </div>
-      </nav>
-
-      <main className="p-8 max-w-7xl mx-auto space-y-8">
-        
-        {/* Selector de Vistas de la Demo */}
-        <div className="flex gap-2 border-b border-slate-800 pb-px">
-          <button 
-            onClick={() => setActiveTab('overview')}
-            className={`pb-3 px-4 text-sm font-medium border-b-2 transition-all ${activeTab === 'overview' ? 'border-cyan-400 text-cyan-400' : 'border-transparent text-slate-400 hover:text-slate-200'}`}
-          >
-            Gestión de Cobros
-          </button>
-          <button 
-            onClick={() => setActiveTab('lotes')}
-            className={`pb-3 px-4 text-sm font-medium border-b-2 transition-all ${activeTab === 'lotes' ? 'border-cyan-400 text-cyan-400' : 'border-transparent text-slate-400 hover:text-slate-200'}`}
-          >
-            Mapa de Lotes ({mockData.lotes.length})
-          </button>
-        </div>
-
-        {/* VISTA 1: GESTIÓN DE COBROS Y BÚSQUEDA */}
-        {activeTab === 'overview' && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div className="min-h-screen">
+      {/* NAVBAR */}
+      <nav className="border-b bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-800 sticky top-0 z-50 transition-colors">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
             
-            {/* Panel de Búsqueda de Clientes */}
-            <div className="lg:col-span-2 space-y-6">
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl">
-                <h2 className="text-lg font-semibold mb-4 text-slate-200">Buscar Propietario</h2>
-                <form onSubmit={handleSearch} className="flex gap-3">
-                  <input 
-                    type="text" 
-                    placeholder="Ingrese nombre, apellido o DNI..." 
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="flex-1 bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-cyan-500 transition-all text-slate-200"
-                  />
-                  <button type="submit" className="bg-cyan-500 hover:bg-cyan-600 text-slate-950 text-sm font-semibold px-5 py-2.5 rounded-lg transition-all shadow-lg shadow-cyan-500/10">
-                    Buscar
-                  </button>
-                </form>
+            {/* Logo */}
+            <div className="flex items-center gap-3">
+              <span className="text-xl font-bold tracking-tight text-blue-600 dark:text-blue-400">
+                {mockData.proyecto.nombre.toUpperCase()}
+              </span>
+              <span className="hidden sm:inline-block text-xs font-medium bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-slate-400 px-2.5 py-0.5 rounded-full border border-gray-200 dark:border-slate-700">
+                Panel Admin
+              </span>
+            </div>
 
-                {/* Tabla de Resultados Dinámica */}
-                {searchResults.length > 0 ? (
-                  <div className="mt-6 overflow-x-auto border border-slate-800 rounded-lg">
-                    <table className="w-full text-left border-collapse text-sm">
-                      <thead>
-                        <tr className="bg-slate-950 border-b border-slate-800 text-slate-400 font-medium">
-                          <th className="p-4">Cliente</th>
-                          <th className="p-4">Ubicación</th>
-                          <th className="p-4">Plan (Cuotas)</th>
-                          <th className="p-4">Estado</th>
-                          <th className="p-4 text-right">Acción</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-800 bg-slate-900/50">
-                        {searchResults.map((cliente) => (
-                          <tr key={cliente.id} className="hover:bg-slate-800/30 transition-all">
-                            <td className="p-4">
-                              <div className="font-semibold text-slate-200">{cliente.apellido}, {cliente.nombre}</div>
-                              <div className="text-xs text-slate-500">DNI: {cliente.dni}</div>
-                            </td>
-                            <td className="p-4 text-slate-300">Manzana {cliente.manzana} - Lote {cliente.lote}</td>
-                            <td className="p-4 text-slate-300">{cliente.cuota_actual}/{cliente.total_cuotas}</td>
-                            <td className="p-4">
-                              <span className={`px-2.5 py-1 rounded-full text-xs font-medium border ${cliente.caducado ? 'bg-red-500/10 text-red-400 border-red-500/20' : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'}`}>
-                                {cliente.estado_pago}
-                              </span>
-                            </td>
-                            <td className="p-4 text-right">
-                              <button 
-                                onClick={() => alert(`Abriendo caja de cobro para el lote ${cliente.manzana}-${cliente.lote}. Próxima cuota base: $${cliente.valor_cuota_usd} USD.`)}
-                                className="text-xs bg-slate-800 border border-slate-700 text-slate-300 px-3 py-1.5 rounded hover:bg-slate-700 transition-all"
-                              >
-                                Cobrar Cuota
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                ) : searchTerm && (
-                  <div className="mt-4 text-sm text-slate-500 bg-slate-950 p-4 border border-slate-800 rounded-lg">
-                    No se encontraron registros coincidentes.
+            {/* Acciones Derecha */}
+            <div className="flex items-center gap-4">
+              <div className="hidden md:block text-xs text-gray-500 dark:text-slate-400 mr-4">
+                Dólar Blue: <span className="font-semibold text-emerald-600 dark:text-emerald-400">${mockData.proyecto.valor_dolar_blue}</span>
+              </div>
+
+              {/* Botón Theme */}
+              <button onClick={() => setIsDarkMode(!isDarkMode)} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-500 dark:text-slate-400 transition-colors">
+                {isDarkMode ? '☀️' : '🌙'}
+              </button>
+
+              {/* Botón Notificaciones */}
+              <div className="relative">
+                <button 
+                  onClick={() => { setShowNotifications(!showNotifications); setShowNavMenu(false); }}
+                  className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-500 dark:text-slate-400 transition-colors relative"
+                >
+                  🔔
+                  {alertas.length > 0 && (
+                    <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white dark:border-slate-900"></span>
+                  )}
+                </button>
+                
+                {/* Dropdown Notificaciones */}
+                {showNotifications && (
+                  <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl shadow-lg py-2 z-50">
+                    <div className="px-4 py-2 border-b border-gray-100 dark:border-slate-700 font-semibold text-sm text-gray-800 dark:text-slate-200">Alertas de Sistema</div>
+                    <div className="max-h-64 overflow-y-auto">
+                      {alertas.length === 0 ? (
+                        <p className="p-4 text-sm text-gray-500 text-center">Todo en orden.</p>
+                      ) : (
+                        alertas.map(a => (
+                          <div key={a.id} className="p-4 border-b border-gray-100 dark:border-slate-700/50 hover:bg-gray-50 dark:hover:bg-slate-700/50 cursor-pointer" onClick={() => {setSelectedClient(a); setShowNotifications(false);}}>
+                            <div className="text-sm font-medium text-gray-800 dark:text-slate-200">{a.apellido}, {a.nombre}</div>
+                            <div className="text-xs text-red-600 dark:text-red-400 mt-1">
+                              {a.meses_atraso >= 6 ? `Caducado (${a.meses_atraso} meses de atraso)` : `Riesgo inminente (${a.meses_atraso} meses de atraso)`}
+                            </div>
+                            <div className="text-[10px] text-gray-500 mt-1">Lote {a.lote} (Mza {a.manzana})</div>
+                          </div>
+                        ))
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
-            </div>
 
-            {/* Panel de Alertas Lateral: Control de Caducidades */}
-            <div className="space-y-6">
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl space-y-4">
-                <h2 className="text-lg font-semibold text-slate-200">Alertas de Morosidad</h2>
-                <div className="space-y-3">
-                  {mockData.clientes.filter(c => c.caducado).map(c => (
-                    <div key={c.id} className="bg-red-500/5 border border-red-500/10 p-4 rounded-lg space-y-2">
-                      <div className="flex justify-between items-start">
-                        <span className="font-medium text-red-400 text-sm">{c.apellido}, {c.nombre}</span>
-                        <span className="text-[10px] uppercase bg-red-500/10 border border-red-500/20 px-2 py-0.5 rounded text-red-400 font-semibold">CADUCADO</span>
-                      </div>
-                      <p className="text-xs text-slate-400">Superó los 6 meses sin registrar actividad de pagos en el Lote {c.lote} (Mza {c.manzana}).</p>
-                      <button 
-                        onClick={() => alert(`Acción simulada: Lote ${c.manzana}-${c.lote} marcado como 'Disponible' en el inventario. Contrato rescindido.`)}
-                        className="text-[11px] bg-red-500/20 hover:bg-red-500/30 text-red-300 px-2.5 py-1 rounded transition-all font-medium w-full"
-                      >
-                        Liberar Terreno y Rescindir
-                      </button>
-                    </div>
-                  ))}
-                </div>
+              {/* Botón Hamburguesa */}
+              <div className="relative">
+                <button 
+                  onClick={() => { setShowNavMenu(!showNavMenu); setShowNotifications(false); }}
+                  className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-500 dark:text-slate-400 transition-colors"
+                >
+                  ☰
+                </button>
+
+                {/* Dropdown Menu */}
+                {showNavMenu && (
+                  <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl shadow-lg py-2 z-50">
+                    <button className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors">Configurar Cuenta</button>
+                    <button className="w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors border-t border-gray-100 dark:border-slate-700 mt-1 pt-2">Lista de Morosos</button>
+                    <button className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors">Cerrar Sesión</button>
+                  </div>
+                )}
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* MAIN CONTENT */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        {/* VISTA 1: LISTADO DE CLIENTES */}
+        {!selectedClient ? (
+          <div className="space-y-6">
+            <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+              <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-slate-100">Directorio de Propietarios</h2>
+              
+              {/* Buscador */}
+              <form onSubmit={handleSearch} className="flex gap-3 mb-6">
+                <input 
+                  type="text" 
+                  placeholder="Buscar por apellido, nombre o DNI..." 
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="flex-1 bg-gray-50 dark:bg-slate-950 border border-gray-300 dark:border-slate-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-slate-200 transition-all"
+                />
+                <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-6 py-2.5 rounded-lg transition-colors">
+                  Buscar
+                </button>
+              </form>
+
+              {/* Tabla */}
+              <div className="overflow-x-auto border border-gray-200 dark:border-slate-800 rounded-xl">
+                <table className="w-full text-left border-collapse text-sm">
+                  <thead>
+                    <tr className="bg-gray-50 dark:bg-slate-950/50 border-b border-gray-200 dark:border-slate-800 text-gray-600 dark:text-slate-400 font-medium">
+                      <th className="p-4">Cliente</th>
+                      <th className="p-4">Lote</th>
+                      <th className="p-4 hidden md:table-cell">Plan Acordado</th>
+                      <th className="p-4">Estado</th>
+                      <th className="p-4 text-right">Acción</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200 dark:divide-slate-800">
+                    {searchResults.map((cliente) => (
+                      <tr key={cliente.id} className="hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors">
+                        <td className="p-4">
+                          <div className="font-semibold text-gray-900 dark:text-slate-200">{cliente.apellido}, {cliente.nombre}</div>
+                          <div className="text-xs text-gray-500 dark:text-slate-500">DNI: {cliente.dni}</div>
+                        </td>
+                        <td className="p-4 text-gray-700 dark:text-slate-300">
+                          Mza {cliente.manzana} - L. {cliente.lote}
+                        </td>
+                        <td className="p-4 text-gray-700 dark:text-slate-300 hidden md:table-cell">
+                          {cliente.plan}
+                        </td>
+                        <td className="p-4">
+                          <span className={`px-2.5 py-1 rounded-full text-xs font-medium border 
+                            ${cliente.meses_atraso === 0 ? 'bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20' : 
+                              cliente.meses_atraso >= 6 ? 'bg-red-100 text-red-700 border-red-200 dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20' : 
+                              'bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-500/10 dark:text-amber-400 dark:border-amber-500/20'}`}>
+                            {cliente.estado_pago}
+                          </span>
+                        </td>
+                        <td className="p-4 text-right">
+                          {/* El nuevo botón lógico */}
+                          <button 
+                            onClick={() => setSelectedClient(cliente)}
+                            className="text-xs font-medium bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 px-4 py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors shadow-sm"
+                          >
+                            Ver Detalles
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
-        )}
+        ) : (
 
-        {/* VISTA 2: INVENTARIO DE LOTES (EFECTO DE CONTROL URBANO) */}
-        {activeTab === 'lotes' && (
-          <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl space-y-6">
-            <div>
-              <h2 className="text-lg font-semibold text-slate-200">Estado General del Fraccionamiento</h2>
-              <p className="text-xs text-slate-500 mt-1">Control visual del inventario técnico y lotes recuperados por vías legales.</p>
-            </div>
+        /* VISTA 2: FICHA DETALLADA DEL CLIENTE */
+          <div className="space-y-6">
+            <button 
+              onClick={() => setSelectedClient(null)}
+              className="text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-slate-400 dark:hover:text-slate-200 transition-colors flex items-center gap-2"
+            >
+              ← Volver al directorio
+            </button>
 
-            {/* Grilla Visual de Lotes */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
-              {mockData.lotes.map(lote => (
-                <div 
-                  key={lote.id} 
-                  className={`p-4 rounded-lg border flex flex-col justify-between transition-all group relative ${
-                    lote.estado === 'Vendido' ? 'bg-slate-950 border-slate-800 text-slate-400' :
-                    lote.estado === 'Liberado por Mora' ? 'bg-amber-500/5 border-amber-500/20 text-amber-400 shadow-lg shadow-amber-500/5' :
-                    'bg-cyan-500/5 border-cyan-500/20 text-cyan-400 shadow-lg shadow-cyan-500/5'
-                  }`}
-                >
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              
+              {/* Tarjeta de Info Principal */}
+              <div className="md:col-span-2 bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+                <div className="flex justify-between items-start mb-6">
                   <div>
-                    <span className="text-xs text-slate-500 block">Manzana {lote.manzana}</span>
-                    <span className="text-xl font-bold tracking-tight">Lote {lote.lote}</span>
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-slate-100">{selectedClient.apellido}, {selectedClient.nombre}</h2>
+                    <p className="text-gray-500 dark:text-slate-400 mt-1">DNI: {selectedClient.dni}</p>
                   </div>
-                  <span className="text-[10px] font-semibold tracking-wide uppercase mt-4 block">
-                    {lote.estado}
+                  <span className={`px-3 py-1 rounded-full text-sm font-medium border 
+                      ${selectedClient.meses_atraso === 0 ? 'bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20' : 
+                        selectedClient.meses_atraso >= 6 ? 'bg-red-100 text-red-700 border-red-200 dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20' : 
+                        'bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-500/10 dark:text-amber-400 dark:border-amber-500/20'}`}>
+                      {selectedClient.estado_pago}
                   </span>
-
-                  {/* Tooltip con información extendida para lotes liberados */}
-                  {lote.estado === 'Liberado por Mora' && (
-                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 bg-slate-900 border border-slate-700 text-slate-300 text-xs p-3 rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-all w-56 shadow-2xl z-20 mb-2">
-                      {lote.historial_moroso}
-                    </div>
-                  )}
                 </div>
-              ))}
+
+                <div className="grid grid-cols-2 gap-4 py-4 border-t border-gray-100 dark:border-slate-800">
+                  <div>
+                    <p className="text-xs text-gray-500 dark:text-slate-500 uppercase tracking-wider font-semibold">Ubicación</p>
+                    <p className="text-gray-900 dark:text-slate-200 font-medium mt-1">Manzana {selectedClient.manzana} / Lote {selectedClient.lote}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500 dark:text-slate-500 uppercase tracking-wider font-semibold">Plan Acordado</p>
+                    <p className="text-gray-900 dark:text-slate-200 font-medium mt-1">{selectedClient.plan}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500 dark:text-slate-500 uppercase tracking-wider font-semibold">Progreso</p>
+                    <p className="text-gray-900 dark:text-slate-200 font-medium mt-1">Cuota {selectedClient.cuota_actual}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500 dark:text-slate-500 uppercase tracking-wider font-semibold">Valor Cuota Base</p>
+                    <p className="text-gray-900 dark:text-slate-200 font-medium mt-1">${selectedClient.valor_cuota_usd} USD</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Panel de Cobranza Operativa */}
+              <div className="bg-blue-50 dark:bg-slate-800/50 border border-blue-100 dark:border-slate-700 rounded-2xl p-6 shadow-sm flex flex-col justify-between">
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-slate-100 mb-2">Gestión de Cobro</h3>
+                  <p className="text-sm text-gray-600 dark:text-slate-400 mb-6">
+                    Abonar próxima cuota ({selectedClient.cuota_actual + 1}). El sistema calculará intereses si corresponde.
+                  </p>
+                </div>
+                
+                <div className="space-y-3">
+                  {selectedClient.meses_atraso >= 6 ? (
+                    <div className="bg-red-100 dark:bg-red-500/10 p-4 rounded-xl border border-red-200 dark:border-red-500/20 text-center">
+                      <p className="text-sm font-semibold text-red-700 dark:text-red-400">Contrato sujeto a rescisión</p>
+                      <p className="text-xs text-red-600 dark:text-red-500 mt-1">Requiere autorización de gerencia para procesar pagos.</p>
+                    </div>
+                  ) : (
+                    <button 
+                      onClick={() => alert(`Caja simulada: Se cobrará la cuota a ${selectedClient.nombre} ${selectedClient.apellido}.`)}
+                      className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl transition-colors shadow-md shadow-blue-500/20"
+                    >
+                      Procesar Nuevo Pago
+                    </button>
+                  )}
+                  <button className="w-full bg-white dark:bg-slate-900 border border-gray-300 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-800 text-gray-700 dark:text-slate-300 font-medium py-3 px-4 rounded-xl transition-colors">
+                    Ver Historial de Recibos
+                  </button>
+                </div>
+              </div>
+
             </div>
           </div>
         )}
-
       </main>
     </div>
   );
