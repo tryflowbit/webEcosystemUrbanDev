@@ -1,0 +1,126 @@
+{
+  "proyecto": {
+    "id": "fincas_altos_del_plata",
+    "nombre": "Fincas Altos del Plata",
+    "valor_dolar_blue": 1250.00,
+    "last_blue_update": "2026-05-30T04:40:00Z"
+  },
+  "clientes": [
+    {
+      "id": 101,
+      "nombre": "Juan",
+      "apellido": "Pérez",
+      "dni": "32456789",
+      "plan": "100% 220 cuotas",
+      "cuotas_pagas": 13,
+      "total_cuotas": 220,
+      "valor_cuota_usd": 250,
+      "manzana": "A",
+      "lote": "01",
+      "dia_cobro": "10",
+      "fecha_primer_pago": "10/01/2025",
+      "pagos": [
+        { "fecha": "10/01/2025", "cuota": 1, "monto": 250, "monto_ars": 287500, "dolar_blue": 1150, "estado": "Pagado" },
+        { "fecha": "09/02/2025", "cuota": 2, "monto": 250, "monto_ars": 287500, "dolar_blue": 1150, "estado": "Pagado" },
+        { "fecha": "10/03/2025", "cuota": 3, "monto": 250, "monto_ars": 290000, "dolar_blue": 1160, "estado": "Pagado" },
+        { "fecha": "08/04/2025", "cuota": 4, "monto": 250, "monto_ars": 295000, "dolar_blue": 1180, "estado": "Pagado" },
+        { "fecha": "09/05/2025", "cuota": 5, "monto": 250, "monto_ars": 300000, "dolar_blue": 1200, "estado": "Pagado" },
+        { "fecha": "10/06/2025", "cuota": 6, "monto": 250, "monto_ars": 302500, "dolar_blue": 1210, "estado": "Pagado" },
+        { "fecha": "10/07/2025", "cuota": 7, "monto": 250, "monto_ars": 305000, "dolar_blue": 1220, "estado": "Pagado" },
+        { "fecha": "09/08/2025", "cuota": 8, "monto": 250, "monto_ars": 310000, "dolar_blue": 1240, "estado": "Pagado" },
+        { "fecha": "10/09/2025", "cuota": 9, "monto": 250, "monto_ars": 312500, "dolar_blue": 1250, "estado": "Pagado" },
+        { "fecha": "09/10/2025", "cuota": 10, "monto": 250, "monto_ars": 315000, "dolar_blue": 1260, "estado": "Pagado" },
+        { "fecha": "10/11/2025", "cuota": 11, "monto": 250, "monto_ars": 320000, "dolar_blue": 1280, "estado": "Pagado" },
+        { "fecha": "08/12/2025", "cuota": 12, "monto": 250, "monto_ars": 322500, "dolar_blue": 1290, "estado": "Pagado" },
+        { "fecha": "10/01/2026", "cuota": 13, "monto": 250, "monto_ars": 325000, "dolar_blue": 1300, "estado": "Pagado" }
+      ]
+    },
+    {
+      "id": 102,
+      "nombre": "María",
+      "apellido": "Rodríguez",
+      "dni": "29444333",
+      "plan": "Anticipo 30% + 60 cuotas",
+      "cuotas_pagas": 7,
+      "total_cuotas": 60,
+      "valor_cuota_usd": 400,
+      "manzana": "B",
+      "lote": "10",
+      "dia_cobro": "5",
+      "fecha_primer_pago": "05/06/2025",
+      "pagos": [
+        { "fecha": "05/06/2025", "cuota": 1, "monto": 400, "monto_ars": 480000, "dolar_blue": 1200, "estado": "Pagado" },
+        { "fecha": "05/07/2025", "cuota": 2, "monto": 400, "monto_ars": 484000, "dolar_blue": 1210, "estado": "Pagado" },
+        { "fecha": "04/08/2025", "cuota": 3, "monto": 400, "monto_ars": 492000, "dolar_blue": 1230, "estado": "Pagado" },
+        { "fecha": "05/09/2025", "cuota": 4, "monto": 400, "monto_ars": 500000, "dolar_blue": 1250, "estado": "Pagado" },
+        { "fecha": "05/10/2025", "cuota": 5, "monto": 400, "monto_ars": 504000, "dolar_blue": 1260, "estado": "Pagado" },
+        { "fecha": "05/11/2025", "cuota": 6, "monto": 400, "monto_ars": 512000, "dolar_blue": 1280, "estado": "Pagado" },
+        { "fecha": "05/12/2025", "cuota": 7, "monto": 400, "monto_ars": 516000, "dolar_blue": 1290, "estado": "Pagado" }
+      ]
+    },
+    {
+      "id": 103,
+      "nombre": "Carlos",
+      "apellido": "López",
+      "dni": "24111222",
+      "plan": "Financiación a medida 36 meses",
+      "cuotas_pagas": 3,
+      "total_cuotas": 36,
+      "valor_cuota_usd": 500,
+      "manzana": "B",
+      "lote": "11",
+      "dia_cobro": "10",
+      "fecha_primer_pago": "10/10/2025",
+      "pagos": [
+        { "fecha": "10/10/2025", "cuota": 1, "monto": 500, "monto_ars": 630000, "dolar_blue": 1260, "estado": "Pagado" },
+        { "fecha": "10/11/2025", "cuota": 2, "monto": 500, "monto_ars": 640000, "dolar_blue": 1280, "estado": "Pagado" },
+        { "fecha": "10/12/2025", "cuota": 3, "monto": 500, "monto_ars": 645000, "dolar_blue": 1290, "estado": "Pagado" }
+      ]
+    },
+    {
+      "id": 104,
+      "nombre": "Ana",
+      "apellido": "Martínez",
+      "dni": "35111222",
+      "plan": "100% 220 cuotas",
+      "cuotas_pagas": 12,
+      "total_cuotas": 220,
+      "valor_cuota_usd": 250,
+      "manzana": "C",
+      "lote": "04",
+      "dia_cobro": "5",
+      "fecha_primer_pago": "05/01/2025",
+      "pagos": [
+        { "fecha": "05/01/2025", "cuota": 1, "monto": 250, "monto_ars": 287500, "dolar_blue": 1150, "estado": "Pagado" },
+        { "fecha": "05/02/2025", "cuota": 2, "monto": 250, "monto_ars": 287500, "dolar_blue": 1150, "estado": "Pagado" },
+        { "fecha": "05/03/2025", "cuota": 3, "monto": 250, "monto_ars": 290000, "dolar_blue": 1160, "estado": "Pagado" },
+        { "fecha": "05/04/2025", "cuota": 4, "monto": 250, "monto_ars": 295000, "dolar_blue": 1180, "estado": "Pagado" },
+        { "fecha": "05/05/2025", "cuota": 5, "monto": 250, "monto_ars": 300000, "dolar_blue": 1200, "estado": "Pagado" },
+        { "fecha": "05/06/2025", "cuota": 6, "monto": 250, "monto_ars": 302500, "dolar_blue": 1210, "estado": "Pagado" },
+        { "fecha": "05/07/2025", "cuota": 7, "monto": 250, "monto_ars": 305000, "dolar_blue": 1220, "estado": "Pagado" },
+        { "fecha": "05/08/2025", "cuota": 8, "monto": 250, "monto_ars": 310000, "dolar_blue": 1240, "estado": "Pagado" },
+        { "fecha": "05/09/2025", "cuota": 9, "monto": 250, "monto_ars": 312500, "dolar_blue": 1250, "estado": "Pagado" },
+        { "fecha": "05/10/2025", "cuota": 10, "monto": 250, "monto_ars": 315000, "dolar_blue": 1260, "estado": "Pagado" },
+        { "fecha": "05/11/2025", "cuota": 11, "monto": 250, "monto_ars": 320000, "dolar_blue": 1280, "estado": "Pagado" },
+        { "fecha": "05/12/2025", "cuota": 12, "monto": 250, "monto_ars": 322500, "dolar_blue": 1290, "estado": "Pagado" }
+      ]
+    },
+    {
+      "id": 105,
+      "nombre": "Gabriel",
+      "apellido": "Sánchez",
+      "dni": "31222444",
+      "plan": "Financiación a medida 36 meses",
+      "cuotas_pagas": 18,
+      "total_cuotas": 36,
+      "valor_cuota_usd": 600,
+      "manzana": "D",
+      "lote": "12",
+      "dia_cobro": "15",
+      "fecha_primer_pago": "15/11/2024",
+      "pagos": [
+        { "fecha": "15/11/2024", "cuota": 1, "monto": 600, "monto_ars": 660000, "dolar_blue": 1100, "estado": "Pagado" }
+      ]
+    }
+  ]
+}
